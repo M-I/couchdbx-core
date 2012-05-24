@@ -59,11 +59,12 @@ erlang_install()
   if [ ! -e .erlang-$ERLANG_VERSION-installed ]; then
     cd src/$ERLANGSRCDIR
     ./configure \
-      --prefix=$WORKDIR/dist/$ERLANGDISTDIR \
-      --enable-hipe \
-      --enable-dynamic-ssl-lib \
-      --with-ssl=/usr \
-      --without-java
+	--prefix=$WORKDIR/dist/$ERLANGDISTDIR \
+	--enable-hipe \
+	--enable-dynamic-ssl-lib \
+	--with-ssl=/usr \
+	--without-java \
+	--enable-darwin-64bit
     # skip wxWidgets
     touch lib/wx/SKIP
     make # can't have -jN so no $MAKEOPTS
