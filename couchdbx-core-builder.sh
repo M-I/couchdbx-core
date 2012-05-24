@@ -9,11 +9,7 @@
 
 # use full svn path for branches like "branches/0.9.x"
 if [ -z "$COUCHDB_VERSION" ]; then
-    COUCHDB_VERSION="0.10.1"
-fi
-
-if [ -z "$COUCHDB_SVNPATH" ]; then
-    COUCHDB_SVNPATH="tags/0.10.1"
+    COUCHDB_VERSION="1.2.0"
 fi
 
 # or R12B-5
@@ -34,7 +30,7 @@ WORKDIR=`pwd`
 ERLANGSRCDIR="erlang_$ERLANG_VERSION"
 ERLANGDISTDIR="$ERLANGSRCDIR"
 
-COUCHDBSRCDIR="couchdb_$COUCHDB_VERSION"
+COUCHDBSRCDIR="apache-couchdb-$COUCHDB_VERSION"
 COUCHDBDISTDIR="$COUCHDBSRCDIR"
 
 #functions
@@ -130,12 +126,10 @@ strip_erlang_dist()
     observer-*/ \
     odbc-*/ \
     orber-*/ \
-    os_mon-*/ \
     otp_mibs-*/ \
     parsetools-*/ \
     percept-*/ \
     pman-*/ \
-    public_key-*/ \
     reltool-*/ \
     runtime_tools-*/ \
     snmp-*/ \
@@ -166,9 +160,8 @@ erlang()
 couchdb_download()
 {
     cd src
-    if [ ! -d "$COUCHDBSRCDIR" ]; then
-      svn checkout http://svn.apache.org/repos/asf/couchdb/$COUCHDB_SVNPATH $COUCHDBSRCDIR
-    fi
+    curl -L -O http://www.gtlib.gatech.edu/pub/apache/couchdb/releases/1.2.0/apache-couchdb-1.2.0.tar.gz
+    tar xvf apache-couchdb-1.2.0.tar.gz
     cd ..
 }
 
@@ -181,11 +174,11 @@ couchdb_install()
     perl -pi -e "s@command=\"\`%ICU_CONFIG% --invoke\`@command=\"@" bin/couchdb.tpl.in
 
     # PATH hack for jan's machine
-    PATH=/usr/bin:$PATH ./bootstrap
-    export ERLC_FLAGS="+native"
+
+#    export ERLC_FLAGS="+native"
     export ERL=$WORKDIR/dist/$ERLANGDISTDIR/bin/erl
     export ERLC=$WORKDIR/dist/$ERLANGDISTDIR/bin/erlc
-    ./configure \
+    CPPFLAGS=-I/usr/local/Cellar/icu4c/4.8.1.1/include/ ./configure \
       --prefix=$WORKDIR/dist/$COUCHDBDISTDIR \
       --with-erlang=$WORKDIR/dist/$ERLANGDISTDIR/lib/erlang/usr/include/ \
       --with-js-include=$WORKDIR/dist/js/include \
