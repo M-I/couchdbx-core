@@ -18,7 +18,7 @@ fi
 
 # or R12B-5
 if [ -z "$ERLANG_VERSION" ]; then
-    ERLANG_VERSION="R13B03"
+    ERLANG_VERSION="R15B01"
 fi
 
 # make options
@@ -42,7 +42,7 @@ erlang_download()
 {
   if [ ! -e .erlang-$ERLANG_VERSION-downloaded ]; then
     FILE_NAME="otp_src_$ERLANG_VERSION"
-    BASE_URL="http://www.csd.uu.se/ftp/mirror/erlang/download"
+    BASE_URL="http://www.erlang.org/download"
     cd src
     if [ ! -e $FILE_NAME.tar.gz ]; then
       curl -O $BASE_URL/$FILE_NAME.tar.gz
